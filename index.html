@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth select-none">
+<head>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Lalenz Order Management System - Showcase</title>
+
+<script>
+(function () {
+
+    const theme = localStorage.getItem("theme");
+    const html = document.documentElement;
+
+    if (theme === "dark") {
+        html.classList.add("dark");
+    } else {
+        html.classList.remove("dark");
+    }
+
+})();
+</script>
+
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+    darkMode: "class",
+};
+</script>
+
+
+<script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+
+<link rel="icon" type="image/png" href="https://placehold.co/100x100" />
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+
+</head>
+
+
+<body class="bg-gray-100 text-gray-800 dark:bg-gray-950 dark:text-gray-100 font-sans">
+
+
+<!-- DEMO LOGIN -->
+<div id="demoLogin"
+class="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-100 dark:bg-gray-950">
+
+
+<div class="w-full max-w-md p-8 rounded-3xl bg-white dark:bg-gray-900 shadow-2xl">
+
+
+<div class="text-center mb-8">
+
+<img src="https://placehold.co/100x100"
+class="mx-auto rounded-full mb-4">
+
+
+<h1 class="text-3xl font-black">
+Lalenz Order System
+</h1>
+
+
+<p class="text-gray-500 text-sm mt-2">
+Showcase Demo Access
+</p>
+
+
+</div>
+
+
+
+<form id="demoLoginForm" class="space-y-4">
+
+
+<div>
+
+<label class="text-sm font-bold">
+Username
+</label>
+
+
+<input
+id="demoUsername"
+type="text"
+value="demo_admin"
+class="w-full mt-2 px-4 py-3 rounded-xl border dark:bg-gray-800">
+
+
+</div>
+
+
+
+<div>
+
+<label class="text-sm font-bold">
+Password
+</label>
+
+
+<input
+id="demoPassword"
+type="password"
+value="password123"
+class="w-full mt-2 px-4 py-3 rounded-xl border dark:bg-gray-800">
+
+
+</div>
+
+
+
+
+<button
+type="submit"
+class="w-full py-3 rounded-xl font-black text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:scale-105 transition">
+
+
+Login
+
+</button>
+
+
+
+</form>
+
+
+
+
+<div class="mt-6 text-center text-xs text-gray-400">
+
+Demo Account:
+
+<br>
+
+Username:
+<b>demo_admin</b>
+
+<br>
+
+Password:
+<b>password123</b>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- MAIN SYSTEM -->
+
+<div id="systemContent" class="hidden">
+
+
+
+<!-- Navigation Bar -->
+
+<!-- Replace this with your navbar.php design -->
+
+<nav class="bg-white dark:bg-gray-900 shadow px-6 py-4">
+
+<div class="max-w-6xl mx-auto flex justify-between items-center">
+
+
+<div class="flex items-center gap-3">
+
+<img src="https://placehold.co/50x50"
+class="rounded-xl">
+
+
+<span class="font-black text-xl">
+Lalenz
+</span>
+
+
+</div>
+
+
+<div class="flex items-center gap-4">
+
+<span class="text-sm font-bold text-gray-400">
+Showcase Mode
+</span>
+
+<button
+onclick="logoutDemo()"
+class="text-xs font-black text-red-500">
+
+Logout
+
+</button>
+
+</div>
+
+
+</div>
+
+</nav>
+
+
+
+
+
+<!-- Main Content -->
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+
+
+
+<!-- DASHBOARD PREVIEW -->
+
+<div id="dashboardPreview">
+
+
+
+<div class="mb-10">
+
+
+<h1 class="text-4xl font-black text-gray-900 dark:text-white">
+Overview
+</h1>
+
+
+<p class="text-gray-400 mt-2">
+Real-time overview of today's operations
+</p>
+
+
+</div>
+
+
+
+
+
+<!-- KPI CARDS START -->
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-12">
+
+
+
+<!-- TODAY SALES -->
+
+<div class="group relative p-[1px] rounded-3xl bg-gradient-to-br from-emerald-500/40 via-transparent to-transparent">
+
+
+<div class="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-8 border border-white/30 dark:border-gray-700/50 shadow-2xl overflow-hidden">
+
+
+<p class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-3">
+
+Today Sales
+
+</p>
+
+
+<div id="todaySales"
+class="text-4xl font-black text-gray-900 dark:text-white">
+
+₱0.00
+
+</div>
+
+
+<p id="todaySalesTrend"
+class="text-xs mt-2 font-semibold text-gray-400">
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- ORDERS TODAY -->
+
+<div class="group relative p-[1px] rounded-3xl bg-gradient-to-br from-blue-500/40 via-transparent to-transparent">
+
+
+<div class="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-8 border border-white/30 dark:border-gray-700/50 shadow-2xl">
+
+
+<p class="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-3">
+
+Orders Today
+
+</p>
+
+
+<div id="ordersToday"
+class="text-4xl font-black text-gray-900 dark:text-white">
+
+0
+
+</div>
+
+
+<p id="ordersTodayTrend"
+class="text-xs mt-2 font-semibold text-gray-400">
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- MORE KPI CARDS CONTINUE PART 2 -->
+
+
+  
+<!-- PENDING -->
+
+<div class="group relative p-[1px] rounded-3xl bg-gradient-to-br from-orange-500/40 via-transparent to-transparent">
+
+
+<div class="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-8 border border-white/30 dark:border-gray-700/50 shadow-2xl">
+
+
+<p class="text-[10px] font-black text-orange-500 uppercase tracking-[0.3em] mb-3">
+
+Pending
+
+</p>
+
+
+<div id="pendingOrders"
+class="text-4xl font-black text-gray-900 dark:text-white">
+
+0
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- COMPLETED -->
+
+<div class="group relative p-[1px] rounded-3xl bg-gradient-to-br from-gray-500/40 via-transparent to-transparent">
+
+
+<div class="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-8 border border-white/30 dark:border-gray-700/50 shadow-2xl">
+
+
+<p class="text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-[0.3em] mb-3">
+
+Completed
+
+</p>
+
+
+<div id="completedOrders"
+class="text-4xl font-black text-gray-900 dark:text-white">
+
+0
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+<!-- KPI CARDS END -->
+
+
+
+
+
+<!-- ORDERS CHART -->
+
+
+<div class="relative p-[1px] rounded-3xl bg-gradient-to-br from-blue-500/30 via-transparent to-transparent mb-10">
+
+
+<div class="backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-6 border border-white/30 dark:border-gray-700/50 shadow-2xl">
+
+
+<div class="flex justify-between items-center mb-4">
+
+
+<h3 class="text-xl font-black tracking-tight">
+
+Performance Overview
+
+</h3>
+
+
+
+<select id="chartRange"
+
+class="px-3 py-1 text-xs font-bold rounded-full bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300 outline-none cursor-pointer">
+
+
+<option value="24h">
+Last 24 Hours
+</option>
+
+
+<option value="7d" selected>
+Last 7 Days
+</option>
+
+
+<option value="15d">
+Last 15 Days
+</option>
+
+
+<option value="30d">
+Last 30 Days
+</option>
+
+
+<option value="60d">
+Last 60 Days
+</option>
+
+
+<option value="1y">
+Last 12 Months
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+<div class="relative w-full h-[300px] sm:h-[350px] lg:h-[450px]">
+
+
+<canvas class="ordersChart"></canvas>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- RECENT ORDERS -->
+
+
+<div class="relative p-[1px] rounded-3xl bg-gradient-to-br from-emerald-500/30 via-transparent to-transparent">
+
+
+<div class="backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-6 border border-white/30 dark:border-gray-700/50 shadow-2xl">
+
+
+
+<div class="flex justify-between items-center mb-6">
+
+
+<h3 class="text-xl font-black tracking-tight">
+
+Recent Orders
+
+</h3>
+
+
+
+<a href="#"
+class="text-sm font-bold text-emerald-500 hover:text-emerald-400 transition">
+
+View all →
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+<div id="recentOrders"
+class="space-y-3">
+
+
+</div>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+<!-- PUBLIC HERO -->
+
+<div id="publicHero"
+class="hidden text-center py-20 md:py-28">
+
+
+
+<h1 class="text-4xl md:text-2xl uppercase tracking-widest font-black mb-6 leading-tight">
+
+
+<img src="https://placehold.co/100x100"
+class="mx-auto mb-4"
+width="100"
+height="100">
+
+
+Order Management System
+
+
+</h1>
+
+
+
+
+<p class="text-gray-400 text-base md:text-xl mb-10 max-w-xl mx-auto">
+
+Modern restaurant management system — fast, simple, and reliable.
+
+</p>
+
+
+
+
+<div class="flex flex-col sm:flex-row justify-center gap-4">
+
+
+<a href="#"
+class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-3 rounded-2xl font-black hover:scale-105 transition shadow">
+
+Admin Login
+
+</a>
+
+
+<a href="#"
+class="hidden border border-gray-300 dark:border-gray-700 px-8 py-3 rounded-2xl font-bold">
+
+Learn More
+
+</a>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<!-- Footer Placeholder -->
+
+<footer class="text-center py-8 text-sm text-gray-400">
+
+© 2026 Lalenz Order Management System
+
+</footer>
+
+
+
+
+</main>
+
+
+</div>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+toastr.options = {
+
+    closeButton:false,
+    progressBar:true,
+    positionClass:"toast-bottom-right",
+    timeOut:"5000"
+
+};
+
+
+
+
+
+// =========================
+// DEMO LOGIN
+// =========================
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+
+const login =
+localStorage.getItem("lalenz_demo_login");
+
+
+if(login==="true"){
+
+    document
+    .getElementById("demoLogin")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("systemContent")
+    .classList.remove("hidden");
+
+}
+
+
+
+document
+.getElementById("demoLoginForm")
+.addEventListener("submit",function(e){
+
+
+e.preventDefault();
+
+
+
+const username =
+document.getElementById("demoUsername").value;
+
+
+const password =
+document.getElementById("demoPassword").value;
+
+
+
+if(
+username==="demo_admin" &&
+password==="password123"
+
+){
+
+
+localStorage.setItem(
+"lalenz_demo_login",
+"true"
+);
+
+
+
+document
+.getElementById("demoLogin")
+.classList.add("hidden");
+
+
+
+document
+.getElementById("systemContent")
+.classList.remove("hidden");
+
+
+
+toastr.success(
+"Welcome to Lalenz Demo"
+);
+
+
+
+loadDashboard();
+
+
+
+}
+
+else{
+
+
+toastr.error(
+"Invalid demo credentials"
+);
+
+
+}
+
+
+
+});
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+// =========================
+// DEMO DATA
+// =========================
+
+
+const demoOrders = [
+
+
+{
+id:1001,
+customer_name:"Juan Dela Cruz",
+grand_total:850,
+status:"Completed",
+order_datetime:"2026-08-01 09:15:00",
+order_items:[
+"Burger",
+"Fries"
+]
+
+},
+
+
+
+{
+id:1002,
+customer_name:"Maria Santos",
+grand_total:420,
+status:"Pending",
+order_datetime:"2026-08-01 10:20:00",
+order_items:[
+"Coffee",
+"Sandwich"
+]
+
+},
+
+
+
+{
+id:1003,
+customer_name:"Pedro Reyes",
+grand_total:1250,
+status:"Preparing",
+order_datetime:"2026-08-01 11:45:00",
+order_items:[
+"Pizza",
+"Pasta"
+]
+
+},
+
+
+
+{
+id:1004,
+customer_name:"Ana Lopez",
+grand_total:670,
+status:"Delivered",
+order_datetime:"2026-08-01 13:10:00",
+order_items:[
+"Chicken Meal"
+]
+
+},
+
+
+
+{
+id:1005,
+customer_name:"Guest",
+grand_total:320,
+status:"Cancelled",
+order_datetime:"2026-08-01 14:00:00",
+order_items:[
+"Drink"
+]
+
+}
+
+
+];
+
+
+
+
+
+
+
+
+let ordersChart = null;
+
+
+
+
+
+
+// =========================
+// LOGOUT DEMO SCRIPT
+// =========================
+function logoutDemo(){
+
+localStorage.removeItem(
+"lalenz_demo_login"
+);
+
+
+location.reload();
+
+}
+
+// =========================
+// LOAD DASHBOARD
+// =========================
+
+
+function loadDashboard(){
+
+
+
+let todaySales=0;
+
+let ordersToday=0;
+
+let pending=0;
+
+let completed=0;
+
+
+
+demoOrders.forEach(order=>{
+
+
+if(order.status==="Cancelled")
+return;
+
+
+
+ordersToday++;
+
+
+todaySales += order.grand_total;
+
+
+
+if(order.status==="Pending")
+pending++;
+
+
+
+if(
+order.status==="Completed" ||
+order.status==="Delivered"
+
+)
+
+completed++;
+
+
+
+});
+
+
+
+
+
+$("#todaySales")
+.text(
+"₱"+
+todaySales.toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2
+}
+)
+);
+
+
+
+$("#ordersToday")
+.text(ordersToday);
+
+
+
+$("#pendingOrders")
+.text(pending);
+
+
+
+$("#completedOrders")
+.text(completed);
+
+
+
+
+
+buildChart();
+
+
+
+renderRecentOrders();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// =========================
+// CHART
+// =========================
+
+
+function buildChart(){
+
+
+
+const ctx =
+document.querySelector(".ordersChart");
+
+
+
+if(!ctx)
+return;
+
+
+
+if(ordersChart)
+ordersChart.destroy();
+
+
+
+ordersChart =
+new Chart(ctx,{
+
+
+type:"line",
+
+
+
+data:{
+
+
+labels:[
+
+"Mon",
+"Tue",
+"Wed",
+"Thu",
+"Fri",
+"Sat",
+"Sun"
+
+],
+
+
+
+datasets:[
+
+
+{
+
+
+label:"Orders",
+
+data:[4,7,3,9,5,12,8],
+
+borderColor:"#3b82f6",
+
+backgroundColor:
+"rgba(59,130,246,.15)",
+
+fill:true,
+
+tension:.4
+
+},
+
+
+
+{
+
+
+label:"Sales",
+
+data:[
+1200,
+1800,
+900,
+2400,
+1500,
+3200,
+2600
+],
+
+
+borderColor:"#10b981",
+
+backgroundColor:
+"rgba(16,185,129,.15)",
+
+fill:true,
+
+tension:.4
+
+}
+
+
+
+]
+
+
+},
+
+
+
+options:{
+
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+
+
+plugins:{
+
+
+legend:{
+
+
+labels:{
+
+
+color:
+document.documentElement
+.classList
+.contains("dark")
+?
+"#fff"
+:
+"#111"
+
+}
+
+
+}
+
+
+}
+
+
+
+}
+
+
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// =========================
+// RECENT ORDERS
+// =========================
+
+
+function renderRecentOrders(){
+
+
+let html="";
+
+
+
+demoOrders
+.slice(0,5)
+.forEach(order=>{
+
+
+html += `
+
+
+<div class="relative p-[1px] rounded-2xl bg-gray-200/40 dark:bg-gray-700/40">
+
+
+<div class="flex items-center justify-between gap-3 p-4 rounded-2xl backdrop-blur-md bg-gray-200 dark:bg-gray-950/75 border border-white/30 dark:border-gray-700/50">
+
+
+
+<div>
+
+
+<div class="text-sm font-black">
+
+${order.customer_name}
+
+</div>
+
+
+<div class="text-xs text-gray-500 mt-1">
+
+Order #${order.id}
+·
+${order.order_items.length} item(s)
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="text-right">
+
+
+<div class="text-sm font-black">
+
+₱${order.grand_total.toFixed(2)}
+
+</div>
+
+
+<div class="mt-1 text-[10px] uppercase font-black px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500">
+
+${order.status}
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+`;
+
+
+});
+
+
+
+$("#recentOrders")
+.html(html);
+
+
+
+}
+
+
+
+
+
+</script>
