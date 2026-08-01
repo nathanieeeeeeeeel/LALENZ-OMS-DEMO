@@ -10,7 +10,7 @@ $systemFolder = "/" . $parts[1]; // e.g., /LALENZ_ORDER_SYSTEM
 // Includes
 // ----------------------------
 
-require_once $_SERVER['DOCUMENT_ROOT'] . $systemFolder . '/Pages/Script/init.php';
+require_once(__DIR__ . "/Pages/Script/init.php");
 ?>
 
 <!DOCTYPE html>
