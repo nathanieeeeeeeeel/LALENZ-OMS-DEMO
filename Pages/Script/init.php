@@ -1,7 +1,7 @@
 <?php
 $systemFolder = "";
 
-require_once __DIR__ . '/Pages/Script/init.php';
+require_once __DIR__ . '/init.php';
 
 // ----------------------------
 // Includes
