@@ -1,1228 +1,1157 @@
+<?php
+
+// ----------------------------
+// Dynamic system root detection
+// ----------------------------
+$parts = explode("/", $_SERVER['PHP_SELF']); 
+$systemFolder = "/" . $parts[1]; // e.g., /LALENZ_ORDER_SYSTEM
+
+// ----------------------------
+// Includes
+// ----------------------------
+
+require_once $_SERVER['DOCUMENT_ROOT'] . $systemFolder . '/Pages/Script/init.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth select-none">
-<head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The variable $systemName is already available because you included 'get_system.php' at the top of the file -->
+    <title><?php echo htmlspecialchars($systemName); ?> - Home</title>
+    <script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const html = document.documentElement;
+
+        if (theme === "dark") {
+          html.classList.add("dark");
+        } else {
+          html.classList.remove("dark"); // default = light
+        }
+      })();
+    </script>
+
+    <!-- <link rel="stylesheet" href="./src/output.css"/> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js" integrity="sha512-8LENNbXmzI/Gbj+OwXmqR6V4QaUAw0/porPzy1+dQoJqC0JPHedWoe0DDOTL2uHA5XXJyIsPtiMHH86pVlay6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="<?= $logo; ?>?v=<?= time(); ?>" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+  <body class="bg-gray-100 text-gray-800 dark:bg-gray-950 dark:text-gray-100 font-sans transition-all duration-300">
+    <!-- Navigation Bar (White Primary) -->
+    <?php include $_SERVER['DOCUMENT_ROOT'] . $systemFolder . '/Pages/Partials/navbar.php'; ?>
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12 transition-transform duration-300">
+      <?php if ($isAdminLoggedIn): ?>
+
+        <!-- DASHBOARD HEADER -->
+        <div class="mb-10">
+            <h1 class="text-4xl font-black text-gray-900 dark:text-white">Overview</h1>
+            <p class="text-gray-400 mt-2">Real-time overview of today’s operations</p>
+        </div>
+
+        <!-- ========================= -->
+        <!-- KPI DASHBOARD -->
+        <!-- ========================= -->
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-10 transition-transform duration-300">
+
+            <!-- TODAY SALES -->
+            <div class="group bg-white dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-gray-800/80 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                    Today Sales
+                    </p>
+                    <h2 id="todaySales" class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    <?php $symbol = $currencyData[$systemCurrency]['symbol'] ?? $systemCurrency; echo htmlspecialchars($symbol . '' . number_format(0.00, 2)); ?>
+                    </h2>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-wallet text-emerald-600 dark:text-emerald-400 text-lg"></i>
+                </div>
+                </div>
+                <div id="todaySalesTrend"
+                    class="mt-4 text-xs font-bold text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                    ---
+                </div>
+
+            </div>
+
+            <!-- ORDERS TODAY -->
+            <div class="group bg-white dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-gray-800/80 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                    Orders Today
+                    </p>
+                    <h2 id="ordersToday" class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    0
+                    </h2>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-shopping-cart text-blue-600 dark:text-blue-400 text-lg"></i>
+                </div>
+                </div>
+                <div id="ordersTodayTrend"
+                    class="mt-4 text-xs font-bold text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                    ---
+                </div>
+
+            </div>
+
+            <!-- PENDING -->
+            <div class="group bg-white dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-gray-800/80 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                    Pending
+                    </p>
+                    <h2 id="pendingOrders" class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    0
+                    </h2>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-clock text-orange-600 dark:text-orange-400 text-lg"></i>
+                </div>
+                </div>
+                
+            </div>
+
+            <!-- COMPLETED -->
+            <div class="group bg-white dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-gray-800/80 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                        Completed
+                        </p>
+                        <h2 id="completedOrders" class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                        0
+                        </h2>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-check-circle text-indigo-600 dark:text-indigo-400 text-lg"></i>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+      <!-- ORDERS CHART -->
+    <div class="relative p-[1px] rounded-2xl bg-gray-200 dark:bg-gray-800 mb-6 transition-all duration-300">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800 transition-all duration-300">
+
+            <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white transition-transform duration-300">Performance Overview</h3>
+            <select id="chartRange"
+                class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 outline-none cursor-pointer">
+                <option value="24h">Last 24 Hours</option>
+                <option value="7d" selected>Last 7 Days</option>
+                <option value="15d">Last 15 Days</option>
+                <option value="30d">Last 30 Days</option>
+                <option value="60d">Last 60 Days</option>
+                <option value="1y">Last 12 Months</option>
+            </select>
+            </div>
+
+            <div class="relative w-full h-[300px] sm:h-[350px]">
+            <canvas class="ordersChart"></canvas>
+            </div>
+
+        </div>
+    </div>
+
+        <!-- RECENT ORDERS -->
+        <div class="relative p-[1px] rounded-2xl bg-gray-200 dark:bg-gray-800">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
+            <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white">Recent Orders</h3>
+            <a href="./Pages/admin/dashboard.php" class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">View all →</a>
+            </div>
+
+            <div id="recentOrders" class="space-y-3"></div>
+        </div>
+        </div>
+
+      <?php else: ?>
+
+      <!-- PUBLIC HERO -->
+      <div class="text-center py-20 md:py-28">
+        <h1 class="text-4xl md:text-2xl uppercase tracking-widest font-black mb-6 leading-tight">
+          <img src="<?= $logo; ?>" alt="Lalenz Logo" class="mx-auto mb-4" width="100" height="100" />
+          Order Management System
+        </h1>
+
+        <p class="text-gray-400 text-base md:text-xl mb-10 max-w-xl mx-auto">Modern restaurant management system — fast, simple, and reliable.</p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a href="<?= $systemFolder ?>/Pages/admin/login.php" class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-3 rounded-2xl font-black hover:scale-105 transition shadow"> Admin Login </a>
+
+          <a href="#" class="hidden border border-gray-300 dark:border-gray-700 px-8 py-3 rounded-2xl font-bold hover:bg-gray-100 dark:hover:bg-gray-800 transition"> Learn More </a>
+        </div>
+      </div>
+
+      <?php endif; ?> <?php include $_SERVER['DOCUMENT_ROOT'] . $systemFolder . '/Pages/Partials/footer.php'; ?>
+    </main>
+
+    <!-- Production -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="<?= $systemFolder ?>/Pages/Script/Dashboard/navbar.js?v=<?= time() ?>"></script>
+    <script>
+      toastr.options = {
+        closeButton: false,
+        debug: false,
+        newestOnTop: false,
+        progressBar: true,
+        positionClass: "toast-bottom-right",
+        preventDuplicates: true,
+        onclick: null,
+        showMethod: "slideUp",
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "5000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut",
+      };
+    </script>
+    <script>
+        const currencyData = <?= json_encode($currencyData) ?>;
+        const systemCurrency = <?= json_encode($systemCurrency) ?>;
+        const activeSymbol =
+            currencyData[systemCurrency]?.symbol || systemCurrency;
+
+        const systemTimezone = <?= json_encode($systemTimezone) ?>;
+
+        let ordersChart = null;
+
+        /* =========================================================
+        HELPERS
+        ========================================================= */
+
+        function money(value) {
+            return `${activeSymbol}${Number(value || 0).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}`;
+        }
+
+        function getStatus(order) {
+            return String(order.status || "").trim().toLowerCase();
+        }
+
+        function isCancelled(order) {
+            return getStatus(order) === "cancelled";
+        }
+
+        /*
+        * Your PHP data appears to use:
+        * YYYY-MM-DD HH:mm:ss
+        *
+        * Convert it safely to a Date object.
+        */
+        function parseOrderDate(value) {
+            if (!value) return null;
+
+            const normalized = String(value)
+                .trim()
+                .replace(" ", "T");
+
+            const date = new Date(normalized + "Z");
+
+            return isNaN(date.getTime()) ? null : date;
+        }
+
+
+        function getDateKey(date) {
+            return date.toLocaleDateString("en-CA", {
+                timeZone: systemTimezone
+            });
+        }
+
+        function getTodayKey() {
+            return getDateKey(new Date());
+        }
+
+        function getDayKeyFromOrder(order) {
+            const date = parseOrderDate(order.order_datetime);
+            return date ? getDateKey(date) : null;
+        }
+
+        function formatDate(date, options = {}) {
+            return date.toLocaleDateString("en-PH", {
+                timeZone: systemTimezone,
+                ...options
+            });
+        }
+
+        /* =========================================================
+        TREND
+        ========================================================= */
+
+        function calcTrend(today, yesterday) {
+
+            if (today === 0 && yesterday === 0) {
+                return {
+                    text: "",
+                    color: "text-gray-400"
+                };
+            }
+
+            if (yesterday === 0 && today > 0) {
+                return {
+                    text: '<i class="fa-solid fa-arrow-trend-up"></i> New activity today',
+                    color: "text-emerald-500"
+                };
+            }
+
+            if (today === 0 && yesterday > 0) {
+                return {
+                    text: 'No activity today',
+                    color: "text-gray-400"
+                };
+            }
+
+            const difference = ((today - yesterday) / yesterday) * 100;
+
+            const icon = difference >= 0
+                ? '<i class="fa-solid fa-arrow-trend-up"></i>'
+                : '<i class="fa-solid fa-arrow-trend-down"></i>';
+
+            return {
+                text: `${icon} ${Math.abs(difference).toFixed(1)}% vs yesterday`,
+                color: difference >= 0
+                    ? "text-emerald-500"
+                    : "text-red-500"
+            };
+        }
+
+        /* =========================================================
+        CHART DATA
+        ========================================================= */
+
+        function buildChart(data, range) {
+
+            let labels = [];
+            let orders = [];
+            let sales = [];
+
+            /* -----------------------------------------------------
+            LAST 24 HOURS
+            ----------------------------------------------------- */
+
+            if (range === "24h") {
+
+                const now = new Date();
+                const cutoff = new Date(
+                    now.getTime() - 24 * 60 * 60 * 1000
+                );
+
+                const grouped = {};
+
+                data.forEach(order => {
+
+                    const date = parseOrderDate(order.order_datetime);
+
+                    if (!date || date < cutoff || date > now) {
+                        return;
+                    }
+
+                    const hourKey = formatDate(date, {
+                        month: "short",
+                        day: "numeric"
+                    }) + " " +
+                    date.toLocaleTimeString("en-PH", {
+                        timeZone: systemTimezone,
+                        hour: "numeric",
+                        hour12: true
+                    });
+
+                    if (!grouped[hourKey]) {
+                        grouped[hourKey] = {
+                            orders: 0,
+                            sales: 0
+                        };
+                    }
+
+                    grouped[hourKey].orders++;
+
+                    if (!isCancelled(order)) {
+                        grouped[hourKey].sales +=
+                            Number(order.grand_total || 0);
+                    }
+                });
+
+                labels = Object.keys(grouped);
+                orders = labels.map(label => grouped[label].orders);
+                sales = labels.map(label => grouped[label].sales);
+            }
+
+            /* -----------------------------------------------------
+            LAST 7 / 15 / 30 / 60 DAYS
+            ----------------------------------------------------- */
+
+            else if (["7d", "15d", "30d", "60d"].includes(range)) {
+
+                const days = {
+                    "7d": 7,
+                    "15d": 15,
+                    "30d": 30,
+                    "60d": 60
+                };
+
+                const daysBack = days[range];
+
+                for (let i = daysBack - 1; i >= 0; i--) {
+
+                    const date = new Date();
+
+                    date.setDate(
+                        date.getDate() - i
+                    );
+
+                    const dayKey = getDateKey(date);
+
+                    labels.push(
+                        formatDate(date, {
+                            month: "short",
+                            day: "numeric",
+                            year: daysBack > 30 ? "numeric" : undefined
+                        })
+                    );
+
+                    let orderCount = 0;
+                    let salesTotal = 0;
+
+                    data.forEach(order => {
+
+                        if (getDayKeyFromOrder(order) !== dayKey) {
+                            return;
+                        }
+
+                        orderCount++;
+
+                        if (!isCancelled(order)) {
+                            salesTotal +=
+                                Number(order.grand_total || 0);
+                        }
+                    });
+
+                    orders.push(orderCount);
+                    sales.push(salesTotal);
+                }
+            }
+
+            /* -----------------------------------------------------
+            LAST 12 MONTHS
+            ----------------------------------------------------- */
+
+            else if (range === "1y") {
+
+                const grouped = {};
+
+                data.forEach(order => {
+
+                    const date = parseOrderDate(order.order_datetime);
+
+                    if (!date) return;
+
+                    const year = Number(
+                        date.toLocaleDateString("en-US", {
+                            timeZone: systemTimezone,
+                            year: "numeric"
+                        })
+                    );
+
+                    const month = Number(
+                        date.toLocaleDateString("en-US", {
+                            timeZone: systemTimezone,
+                            month: "numeric"
+                        })
+                    );
+
+                    const key =
+                        `${year}-${String(month).padStart(2, "0")}`;
+
+                    if (!grouped[key]) {
+                        grouped[key] = {
+                            orders: 0,
+                            sales: 0
+                        };
+                    }
+
+                    grouped[key].orders++;
+
+                    if (!isCancelled(order)) {
+                        grouped[key].sales +=
+                            Number(order.grand_total || 0);
+                    }
+                });
+
+                const current = new Date();
+
+                for (let i = 11; i >= 0; i--) {
+
+                    const date = new Date(
+                        current.getFullYear(),
+                        current.getMonth() - i,
+                        1
+                    );
+
+                    const year = date.getFullYear();
+                    const month = date.getMonth() + 1;
+
+                    const key =
+                        `${year}-${String(month).padStart(2, "0")}`;
+
+                    labels.push(
+                        formatDate(date, {
+                            month: "short",
+                            year: "numeric"
+                        })
+                    );
+
+                    orders.push(
+                        grouped[key]?.orders || 0
+                    );
+
+                    sales.push(
+                        grouped[key]?.sales || 0
+                    );
+                }
+            }
+
+            renderChart({
+                labels,
+                orders,
+                sales
+            });
+        }
+
+        /* =========================================================
+        RENDER CHART
+        ========================================================= */
+
+        function renderChart(chartData) {
+
+            const canvas =
+                document.querySelector(".ordersChart");
+
+            if (!canvas) return;
+
+            if (ordersChart) {
+                ordersChart.destroy();
+            }
+
+            const dark =
+                document.documentElement.classList.contains("dark");
+
+            const textColor =
+                dark ? "#e5e7eb" : "#111827";
+
+            const gridColor =
+                dark
+                    ? "rgba(255,255,255,0.08)"
+                    : "rgba(0,0,0,0.08)";
+
+            ordersChart = new Chart(canvas, {
+
+                type: "line",
+
+                data: {
+
+                    labels: chartData.labels,
+
+                    datasets: [
+
+                        {
+                            label: "Orders",
+
+                            data: chartData.orders,
+
+                            borderColor: "#3b82f6",
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                            backgroundColor:
+                                "rgba(59,130,246,0.12)",
 
-<title>Lalenz Order Management System - Showcase</title>
+                            borderWidth: 2,
 
-<script>
-(function () {
+                            tension: 0.4,
 
-    const theme = localStorage.getItem("theme");
-    const html = document.documentElement;
+                            fill: true,
 
-    if (theme === "dark") {
-        html.classList.add("dark");
-    } else {
-        html.classList.remove("dark");
-    }
+                            pointRadius: 3,
 
-})();
-</script>
+                            pointHoverRadius: 5,
 
+                            yAxisID: "orders"
+                        },
 
-<script src="https://cdn.tailwindcss.com"></script>
+                        {
+                            label: "Sales",
 
-<script>
-tailwind.config = {
-    darkMode: "class",
-};
-</script>
+                            data: chartData.sales,
 
+                            borderColor: "#10b981",
 
-<script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                            backgroundColor:
+                                "rgba(16,185,129,0.12)",
 
-<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+                            borderWidth: 2,
 
-<link rel="icon" type="image/png" href="https://placehold.co/100x100" />
+                            tension: 0.4,
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+                            fill: true,
 
+                            pointRadius: 3,
 
-</head>
+                            pointHoverRadius: 5,
 
+                            yAxisID: "sales"
+                        }
 
-<body class="bg-gray-100 text-gray-800 dark:bg-gray-950 dark:text-gray-100 font-sans">
+                    ]
+                },
 
+                options: {
 
-<!-- DEMO LOGIN -->
-<div id="demoLogin"
-class="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-100 dark:bg-gray-950">
+                    responsive: true,
 
+                    maintainAspectRatio: false,
 
-<div class="w-full max-w-md p-8 rounded-3xl bg-white dark:bg-gray-900 shadow-2xl">
+                    interaction: {
+                        mode: "index",
+                        intersect: false
+                    },
 
+                    plugins: {
 
-<div class="text-center mb-8">
+                        legend: {
+                            labels: {
+                                color: textColor
+                            }
+                        },
 
-<img src="https://placehold.co/100x100"
-class="mx-auto rounded-full mb-4">
+                        tooltip: {
 
+                            callbacks: {
 
-<h1 class="text-3xl font-black">
-Lalenz Order System
-</h1>
+                                label: function(context) {
 
+                                    const value =
+                                        Number(context.parsed.y || 0);
 
-<p class="text-gray-500 text-sm mt-2">
-Showcase Demo Access
-</p>
+                                    if (
+                                        context.dataset.label === "Sales"
+                                    ) {
+                                        return `Sales: ${money(value)}`;
+                                    }
 
+                                    return `Orders: ${value}`;
+                                }
+                            }
+                        }
+                    },
 
-</div>
+                    scales: {
 
+                        x: {
 
+                            ticks: {
+                                color: textColor
+                            },
 
-<form id="demoLoginForm" class="space-y-4">
+                            grid: {
+                                color: gridColor
+                            }
+                        },
 
+                        orders: {
 
-<div>
+                            type: "linear",
 
-<label class="text-sm font-bold">
-Username
-</label>
+                            position: "left",
 
+                            beginAtZero: true,
 
-<input
-id="demoUsername"
-type="text"
-value="demo_admin"
-class="w-full mt-2 px-4 py-3 rounded-xl border dark:bg-gray-800">
+                            ticks: {
+                                color: textColor,
+                                precision: 0
+                            },
 
+                            grid: {
+                                color: gridColor
+                            }
+                        },
 
-</div>
+                        sales: {
 
+                            type: "linear",
 
+                            position: "right",
 
-<div>
+                            beginAtZero: true,
 
-<label class="text-sm font-bold">
-Password
-</label>
+                            ticks: {
 
+                                color: textColor,
 
-<input
-id="demoPassword"
-type="password"
-value="password123"
-class="w-full mt-2 px-4 py-3 rounded-xl border dark:bg-gray-800">
+                                callback: function(value) {
+                                    return money(value);
+                                }
+                            },
 
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
-</div>
+        /* =========================================================
+        DASHBOARD
+        ========================================================= */
 
+        $(document).ready(function() {
 
+            $.get({
+                url:
+                    "<?= $systemFolder ?>/Pages/Script/get_orders.php?t="
+                    + Date.now(),
 
+                dataType: "json",
 
-<button
-type="submit"
-class="w-full py-3 rounded-xl font-black text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:scale-105 transition">
+                success: function(data) {
 
+                    if (!Array.isArray(data)) {
 
-Login
+                        console.error(
+                            "Expected an array:",
+                            data
+                        );
 
-</button>
+                        toastr.error(
+                            "Invalid dashboard data."
+                        );
 
+                        return;
+                    }
 
+                    /* -------------------------------------------------
+                    DATE KEYS
+                    ------------------------------------------------- */
 
-</form>
+                    const today =
+                        getTodayKey();
 
+                    const yesterdayDate =
+                        new Date();
 
+                    yesterdayDate.setDate(
+                        yesterdayDate.getDate() - 1
+                    );
 
+                    const yesterday =
+                        getDateKey(yesterdayDate);
 
-<div class="mt-6 text-center text-xs text-gray-400">
+                    /* -------------------------------------------------
+                    KPI VALUES
+                    ------------------------------------------------- */
 
-Demo Account:
+                    let todaySales = 0;
+                    let yesterdaySales = 0;
 
-<br>
+                    let ordersToday = 0;
+                    let yesterdayOrders = 0;
 
-Username:
-<b>demo_admin</b>
+                    let pendingOrders = 0;
+                    let completedOrders = 0;
 
-<br>
+                    data.forEach(order => {
 
-Password:
-<b>password123</b>
+                        const day =
+                            getDayKeyFromOrder(order);
 
-</div>
+                        const status =
+                            getStatus(order);
 
+                        /* TODAY */
 
-</div>
+                        if (day === today) {
 
+                            if (status !== "cancelled") {
 
-</div>
+                                ordersToday++;
 
+                                todaySales +=
+                                    Number(order.grand_total || 0);
 
+                                if (status === "pending") {
+                                    pendingOrders++;
+                                }
 
+                                if (status === "completed") {
+                                    completedOrders++;
+                                }
+                            }
+                        }
 
+                        /* YESTERDAY */
 
-<!-- MAIN SYSTEM -->
+                        if (day === yesterday) {
 
-<div id="systemContent" class="hidden">
+                            if (status !== "cancelled") {
 
+                                yesterdayOrders++;
 
+                                yesterdaySales +=
+                                    Number(order.grand_total || 0);
+                            }
+                        }
+                    });
 
-<!-- Navigation Bar -->
+                    /* -------------------------------------------------
+                    UPDATE KPI
+                    ------------------------------------------------- */
 
-<!-- Replace this with your navbar.php design -->
+                    $("#todaySales")
+                        .text(money(todaySales));
 
-<nav class="bg-white dark:bg-gray-900 shadow px-6 py-4">
+                    const salesTrend =
+                        calcTrend(
+                            todaySales,
+                            yesterdaySales
+                        );
 
-<div class="max-w-6xl mx-auto flex justify-between items-center">
+                    $("#todaySalesTrend")
+                        .html(salesTrend.text)
+                        .removeClass(
+                            "text-gray-400 text-gray-500 text-emerald-600 text-emerald-500 text-red-600 text-red-500 dark:text-gray-500 dark:text-gray-400 dark:text-emerald-400 dark:text-red-400"
+                        )
+                        .addClass(salesTrend.color);
 
 
-<div class="flex items-center gap-3">
+                    $("#ordersToday")
+                        .text(ordersToday);
 
-<img src="https://placehold.co/50x50"
-class="rounded-xl">
+                    const ordersTrend =
+                        calcTrend(
+                            ordersToday,
+                            yesterdayOrders
+                        );
 
+                    $("#ordersTodayTrend")
+                        .html(ordersTrend.text)
+                        .removeClass(
+                            "text-gray-400 text-gray-500 text-emerald-600 text-emerald-500 text-red-600 text-red-500 dark:text-gray-500 dark:text-gray-400 dark:text-emerald-400 dark:text-red-400"
+                        )
+                        .addClass(ordersTrend.color);
 
-<span class="font-black text-xl">
-Lalenz
-</span>
 
+                    $("#pendingOrders")
+                        .text(pendingOrders);
 
-</div>
+                    $("#completedOrders")
+                        .text(completedOrders);
 
+                    /* -------------------------------------------------
+                    INITIAL CHART
+                    ------------------------------------------------- */
 
-<div class="flex items-center gap-4">
+                    buildChart(data, "7d");
 
-<span class="text-sm font-bold text-gray-400">
-Showcase Mode
-</span>
+                    /* -------------------------------------------------
+                    CHART RANGE
+                    ------------------------------------------------- */
 
-<button
-onclick="logoutDemo()"
-class="text-xs font-black text-red-500">
+                    const chartRange =
+                        document.getElementById("chartRange");
 
-Logout
+                    if (chartRange) {
 
-</button>
+                        chartRange.addEventListener(
+                            "change",
+                            function() {
 
-</div>
+                                buildChart(
+                                    data,
+                                    this.value
+                                );
+                            }
+                        );
+                    }
 
+                    /* -------------------------------------------------
+                    RECENT ORDERS
+                    ------------------------------------------------- */
 
-</div>
+                    const recentOrders = [...data]
+                        .sort(function(a, b) {
 
-</nav>
+                            const dateA =
+                                parseOrderDate(a.order_datetime);
 
+                            const dateB =
+                                parseOrderDate(b.order_datetime);
 
+                            return dateB - dateA;
+                        })
+                        .slice(0, 5);
 
+                    if (!recentOrders.length) {
 
+                        $("#recentOrders").html(`
+                            <div class="text-center py-4 text-gray-400">
+                                No orders found.
+                            </div>
+                        `);
 
-<!-- Main Content -->
+                        return;
+                    }
 
-<main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+                    /* -------------------------------------------------
+                    STATUS
+                    ------------------------------------------------- */
 
+                    const statusStyles = {
 
+                        "Pending":
+                            "bg-orange-500/10 text-orange-500 border-orange-500/20",
 
-<!-- DASHBOARD PREVIEW -->
+                        "Out For Delivery":
+                            "bg-blue-500/10 text-blue-500 border-blue-500/20",
 
-<div id="dashboardPreview">
+                        "Cancelled":
+                            "bg-red-500/10 text-red-500 border-red-500/20",
 
+                        "Preparing":
+                            "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
 
+                        "Completed":
+                            "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
 
-<div class="mb-10">
+                        "Scheduled":
+                            "bg-purple-500/10 text-purple-500 border-purple-500/20",
 
+                        "Ready":
+                            "bg-green-500/10 text-green-500 border-green-500/20"
+                    };
 
-<h1 class="text-4xl font-black text-gray-900 dark:text-white">
-Overview
-</h1>
+                    const statusNames = {
 
+                        pending:
+                            "Pending",
 
-<p class="text-gray-400 mt-2">
-Real-time overview of today's operations
-</p>
+                        out_for_delivery:
+                            "Out For Delivery",
 
+                        cancelled:
+                            "Cancelled",
 
-</div>
+                        preparing:
+                            "Preparing",
 
+                        scheduled:
+                            "Scheduled",
 
+                        ready:
+                            "Ready",
 
+                        completed:
+                            "Completed",
 
+                        delivered:
+                            "Completed",
 
-<!-- KPI CARDS START -->
+                        done:
+                            "Completed"
+                    };
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-12">
+                    function displayStatus(status) {
 
+                        const normalized =
+                            String(status || "")
+                                .toLowerCase()
+                                .trim()
+                                .replace(/\s+/g, "_");
 
+                        return (
+                            statusNames[normalized]
+                            || status
+                            || "Unknown"
+                        );
+                    }
 
-<!-- TODAY SALES -->
+                    /* -------------------------------------------------
+                    BUILD RECENT ORDERS
+                    ------------------------------------------------- */
 
-<div class="group relative p-[1px] rounded-3xl bg-gradient-to-br from-emerald-500/40 via-transparent to-transparent">
+                    const ordersHtml =
+                        recentOrders.map(order => {
 
+                            const status =
+                                displayStatus(order.status);
 
-<div class="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-8 border border-white/30 dark:border-gray-700/50 shadow-2xl overflow-hidden">
+                            const statusClass =
+                                statusStyles[status]
+                                || "bg-gray-100 text-gray-800";
 
+                            let itemCount = 1;
 
-<p class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-3">
+                            try {
 
-Today Sales
+                                const items =
+                                    JSON.parse(
+                                        order.order_items || "[]"
+                                    );
 
-</p>
+                                if (Array.isArray(items)) {
+                                    itemCount =
+                                        items.length || 1;
+                                }
 
+                            } catch {
 
-<div id="todaySales"
-class="text-4xl font-black text-gray-900 dark:text-white">
+                                itemCount =
+                                    Number(order.total_items || 1);
+                            }
 
-₱0.00
+                            const total =
+                                money(order.grand_total);
 
-</div>
+                            return `
 
+                                <div class="
+                                    relative
+                                    p-[1px]
+                                    rounded-2xl
+                                    bg-gray-200/40
+                                    dark:bg-gray-700/40
+                                ">
 
-<p id="todaySalesTrend"
-class="text-xs mt-2 font-semibold text-gray-400">
+                                    <div class="
+                                        flex
+                                        items-center
+                                        justify-between
+                                        gap-3
+                                        p-4
+                                        rounded-2xl
+                                        bg-gray-200
+                                        dark:bg-gray-950/75
+                                        border
+                                        border-white/30
+                                        dark:border-gray-700/50
+                                    ">
 
-</p>
+                                        <!-- LEFT -->
 
+                                        <div class="min-w-0">
 
-</div>
+                                            <div class="
+                                                text-sm
+                                                font-black
+                                                text-gray-900
+                                                dark:text-gray-100
+                                                truncate
+                                            ">
+                                                ${order.customer_name || "Guest"}
+                                            </div>
 
+                                            <div class="
+                                                text-xs
+                                                text-gray-500
+                                                dark:text-gray-300
+                                                mt-1
+                                            ">
+                                                Order #${order.id}
+                                                ·
+                                                ${itemCount}
+                                                item${itemCount !== 1 ? "s" : ""}
+                                                ·
+                                                ${new Date(order.order_datetime.replace(" ", "T") + "Z").toLocaleString("en-PH", {
+                                                    timeZone: systemTimezone || "UTC",
+                                                    dateStyle: "medium",
+                                                    timeStyle: "short"
+                                                })}
+                                            </div>
 
-</div>
+                                        </div>
 
+                                        <!-- RIGHT -->
 
+                                        <div class="
+                                            text-right
+                                            shrink-0
+                                        ">
 
+                                            <div class="
+                                                text-sm
+                                                font-black
+                                                text-gray-900
+                                                dark:text-gray-100
+                                            ">
+                                                ${total}
+                                            </div>
 
+                                            <div class="
+                                                mt-1
+                                                text-[10px]
+                                                font-black
+                                                uppercase
+                                                px-3
+                                                py-1.5
+                                                rounded-full
+                                                ${statusClass}
+                                            ">
+                                                ${status}
+                                            </div>
 
-<!-- ORDERS TODAY -->
+                                        </div>
 
-<div class="group relative p-[1px] rounded-3xl bg-gradient-to-br from-blue-500/40 via-transparent to-transparent">
+                                    </div>
 
+                                </div>
 
-<div class="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-8 border border-white/30 dark:border-gray-700/50 shadow-2xl">
+                            `;
 
+                        }).join("");
 
-<p class="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-3">
+                    $("#recentOrders")
+                        .html(ordersHtml);
+                },
 
-Orders Today
+                error: function(xhr) {
 
-</p>
+                    console.error(
+                        "Dashboard request failed:",
+                        xhr.responseText
+                    );
 
+                    toastr.error(
+                        "Failed to load dashboard data."
+                    );
+                }
+            });
+        });
+        </script>
 
-<div id="ordersToday"
-class="text-4xl font-black text-gray-900 dark:text-white">
-
-0
-
-</div>
-
-
-<p id="ordersTodayTrend"
-class="text-xs mt-2 font-semibold text-gray-400">
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-<!-- MORE KPI CARDS CONTINUE PART 2 -->
-
-
-  
-<!-- PENDING -->
-
-<div class="group relative p-[1px] rounded-3xl bg-gradient-to-br from-orange-500/40 via-transparent to-transparent">
-
-
-<div class="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-8 border border-white/30 dark:border-gray-700/50 shadow-2xl">
-
-
-<p class="text-[10px] font-black text-orange-500 uppercase tracking-[0.3em] mb-3">
-
-Pending
-
-</p>
-
-
-<div id="pendingOrders"
-class="text-4xl font-black text-gray-900 dark:text-white">
-
-0
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<!-- COMPLETED -->
-
-<div class="group relative p-[1px] rounded-3xl bg-gradient-to-br from-gray-500/40 via-transparent to-transparent">
-
-
-<div class="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-8 border border-white/30 dark:border-gray-700/50 shadow-2xl">
-
-
-<p class="text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-[0.3em] mb-3">
-
-Completed
-
-</p>
-
-
-<div id="completedOrders"
-class="text-4xl font-black text-gray-900 dark:text-white">
-
-0
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-<!-- KPI CARDS END -->
-
-
-
-
-
-<!-- ORDERS CHART -->
-
-
-<div class="relative p-[1px] rounded-3xl bg-gradient-to-br from-blue-500/30 via-transparent to-transparent mb-10">
-
-
-<div class="backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-6 border border-white/30 dark:border-gray-700/50 shadow-2xl">
-
-
-<div class="flex justify-between items-center mb-4">
-
-
-<h3 class="text-xl font-black tracking-tight">
-
-Performance Overview
-
-</h3>
-
-
-
-<select id="chartRange"
-
-class="px-3 py-1 text-xs font-bold rounded-full bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300 outline-none cursor-pointer">
-
-
-<option value="24h">
-Last 24 Hours
-</option>
-
-
-<option value="7d" selected>
-Last 7 Days
-</option>
-
-
-<option value="15d">
-Last 15 Days
-</option>
-
-
-<option value="30d">
-Last 30 Days
-</option>
-
-
-<option value="60d">
-Last 60 Days
-</option>
-
-
-<option value="1y">
-Last 12 Months
-</option>
-
-
-</select>
-
-
-</div>
-
-
-
-
-
-<div class="relative w-full h-[300px] sm:h-[350px] lg:h-[450px]">
-
-
-<canvas class="ordersChart"></canvas>
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-<!-- RECENT ORDERS -->
-
-
-<div class="relative p-[1px] rounded-3xl bg-gradient-to-br from-emerald-500/30 via-transparent to-transparent">
-
-
-<div class="backdrop-blur-xl bg-white/70 dark:bg-gray-900/60 rounded-3xl p-6 border border-white/30 dark:border-gray-700/50 shadow-2xl">
-
-
-
-<div class="flex justify-between items-center mb-6">
-
-
-<h3 class="text-xl font-black tracking-tight">
-
-Recent Orders
-
-</h3>
-
-
-
-<a href="#"
-class="text-sm font-bold text-emerald-500 hover:text-emerald-400 transition">
-
-View all →
-
-</a>
-
-
-
-</div>
-
-
-
-
-
-<div id="recentOrders"
-class="space-y-3">
-
-
-</div>
-
-
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-
-
-
-<!-- PUBLIC HERO -->
-
-<div id="publicHero"
-class="hidden text-center py-20 md:py-28">
-
-
-
-<h1 class="text-4xl md:text-2xl uppercase tracking-widest font-black mb-6 leading-tight">
-
-
-<img src="https://placehold.co/100x100"
-class="mx-auto mb-4"
-width="100"
-height="100">
-
-
-Order Management System
-
-
-</h1>
-
-
-
-
-<p class="text-gray-400 text-base md:text-xl mb-10 max-w-xl mx-auto">
-
-Modern restaurant management system — fast, simple, and reliable.
-
-</p>
-
-
-
-
-<div class="flex flex-col sm:flex-row justify-center gap-4">
-
-
-<a href="#"
-class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-3 rounded-2xl font-black hover:scale-105 transition shadow">
-
-Admin Login
-
-</a>
-
-
-<a href="#"
-class="hidden border border-gray-300 dark:border-gray-700 px-8 py-3 rounded-2xl font-bold">
-
-Learn More
-
-</a>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-<!-- Footer Placeholder -->
-
-<footer class="text-center py-8 text-sm text-gray-400">
-
-© 2026 Lalenz Order Management System
-
-</footer>
-
-
-
-
-</main>
-
-
-</div>
-<script src="https://unpkg.com/@popperjs/core@2"></script>
-<script src="https://unpkg.com/tippy.js@6"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-<script>
-
-toastr.options = {
-
-    closeButton:false,
-    progressBar:true,
-    positionClass:"toast-bottom-right",
-    timeOut:"5000"
-
-};
-
-
-
-
-
-// =========================
-// DEMO LOGIN
-// =========================
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-
-const login =
-localStorage.getItem("lalenz_demo_login");
-
-
-if(login==="true"){
-
-    document
-    .getElementById("demoLogin")
-    .classList.add("hidden");
-
-
-    document
-    .getElementById("systemContent")
-    .classList.remove("hidden");
-
-}
-
-
-
-document
-.getElementById("demoLoginForm")
-.addEventListener("submit",function(e){
-
-
-e.preventDefault();
-
-
-
-const username =
-document.getElementById("demoUsername").value;
-
-
-const password =
-document.getElementById("demoPassword").value;
-
-
-
-if(
-username==="demo_admin" &&
-password==="password123"
-
-){
-
-
-localStorage.setItem(
-"lalenz_demo_login",
-"true"
-);
-
-
-
-document
-.getElementById("demoLogin")
-.classList.add("hidden");
-
-
-
-document
-.getElementById("systemContent")
-.classList.remove("hidden");
-
-
-
-toastr.success(
-"Welcome to Lalenz Demo"
-);
-
-
-
-loadDashboard();
-
-
-
-}
-
-else{
-
-
-toastr.error(
-"Invalid demo credentials"
-);
-
-
-}
-
-
-
-});
-
-
-
-
-
-});
-
-
-
-
-
-
-
-
-// =========================
-// DEMO DATA
-// =========================
-
-
-const demoOrders = [
-
-
-{
-id:1001,
-customer_name:"Juan Dela Cruz",
-grand_total:850,
-status:"Completed",
-order_datetime:"2026-08-01 09:15:00",
-order_items:[
-"Burger",
-"Fries"
-]
-
-},
-
-
-
-{
-id:1002,
-customer_name:"Maria Santos",
-grand_total:420,
-status:"Pending",
-order_datetime:"2026-08-01 10:20:00",
-order_items:[
-"Coffee",
-"Sandwich"
-]
-
-},
-
-
-
-{
-id:1003,
-customer_name:"Pedro Reyes",
-grand_total:1250,
-status:"Preparing",
-order_datetime:"2026-08-01 11:45:00",
-order_items:[
-"Pizza",
-"Pasta"
-]
-
-},
-
-
-
-{
-id:1004,
-customer_name:"Ana Lopez",
-grand_total:670,
-status:"Delivered",
-order_datetime:"2026-08-01 13:10:00",
-order_items:[
-"Chicken Meal"
-]
-
-},
-
-
-
-{
-id:1005,
-customer_name:"Guest",
-grand_total:320,
-status:"Cancelled",
-order_datetime:"2026-08-01 14:00:00",
-order_items:[
-"Drink"
-]
-
-}
-
-
-];
-
-
-
-
-
-
-
-
-let ordersChart = null;
-
-
-
-
-
-
-// =========================
-// LOGOUT DEMO SCRIPT
-// =========================
-function logoutDemo(){
-
-localStorage.removeItem(
-"lalenz_demo_login"
-);
-
-
-location.reload();
-
-}
-
-// =========================
-// LOAD DASHBOARD
-// =========================
-
-
-function loadDashboard(){
-
-
-
-let todaySales=0;
-
-let ordersToday=0;
-
-let pending=0;
-
-let completed=0;
-
-
-
-demoOrders.forEach(order=>{
-
-
-if(order.status==="Cancelled")
-return;
-
-
-
-ordersToday++;
-
-
-todaySales += order.grand_total;
-
-
-
-if(order.status==="Pending")
-pending++;
-
-
-
-if(
-order.status==="Completed" ||
-order.status==="Delivered"
-
-)
-
-completed++;
-
-
-
-});
-
-
-
-
-
-$("#todaySales")
-.text(
-"₱"+
-todaySales.toLocaleString(
-"en-US",
-{
-minimumFractionDigits:2
-}
-)
-);
-
-
-
-$("#ordersToday")
-.text(ordersToday);
-
-
-
-$("#pendingOrders")
-.text(pending);
-
-
-
-$("#completedOrders")
-.text(completed);
-
-
-
-
-
-buildChart();
-
-
-
-renderRecentOrders();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// =========================
-// CHART
-// =========================
-
-
-function buildChart(){
-
-
-
-const ctx =
-document.querySelector(".ordersChart");
-
-
-
-if(!ctx)
-return;
-
-
-
-if(ordersChart)
-ordersChart.destroy();
-
-
-
-ordersChart =
-new Chart(ctx,{
-
-
-type:"line",
-
-
-
-data:{
-
-
-labels:[
-
-"Mon",
-"Tue",
-"Wed",
-"Thu",
-"Fri",
-"Sat",
-"Sun"
-
-],
-
-
-
-datasets:[
-
-
-{
-
-
-label:"Orders",
-
-data:[4,7,3,9,5,12,8],
-
-borderColor:"#3b82f6",
-
-backgroundColor:
-"rgba(59,130,246,.15)",
-
-fill:true,
-
-tension:.4
-
-},
-
-
-
-{
-
-
-label:"Sales",
-
-data:[
-1200,
-1800,
-900,
-2400,
-1500,
-3200,
-2600
-],
-
-
-borderColor:"#10b981",
-
-backgroundColor:
-"rgba(16,185,129,.15)",
-
-fill:true,
-
-tension:.4
-
-}
-
-
-
-]
-
-
-},
-
-
-
-options:{
-
-
-responsive:true,
-
-maintainAspectRatio:false,
-
-
-
-plugins:{
-
-
-legend:{
-
-
-labels:{
-
-
-color:
-document.documentElement
-.classList
-.contains("dark")
-?
-"#fff"
-:
-"#111"
-
-}
-
-
-}
-
-
-}
-
-
-
-}
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// =========================
-// RECENT ORDERS
-// =========================
-
-
-function renderRecentOrders(){
-
-
-let html="";
-
-
-
-demoOrders
-.slice(0,5)
-.forEach(order=>{
-
-
-html += `
-
-
-<div class="relative p-[1px] rounded-2xl bg-gray-200/40 dark:bg-gray-700/40">
-
-
-<div class="flex items-center justify-between gap-3 p-4 rounded-2xl backdrop-blur-md bg-gray-200 dark:bg-gray-950/75 border border-white/30 dark:border-gray-700/50">
-
-
-
-<div>
-
-
-<div class="text-sm font-black">
-
-${order.customer_name}
-
-</div>
-
-
-<div class="text-xs text-gray-500 mt-1">
-
-Order #${order.id}
-·
-${order.order_items.length} item(s)
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="text-right">
-
-
-<div class="text-sm font-black">
-
-₱${order.grand_total.toFixed(2)}
-
-</div>
-
-
-<div class="mt-1 text-[10px] uppercase font-black px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500">
-
-${order.status}
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
-
-`;
-
-
-});
-
-
-
-$("#recentOrders")
-.html(html);
-
-
-
-}
-
-
-
-
-
-</script>
+  </body>
+</html>
