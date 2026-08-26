@@ -1,0 +1,223 @@
+<?php
+// Only include if navbar is loaded from pages that do NOT already include init.php
+// require_once $_SERVER['DOCUMENT_ROOT'] . $systemFolder . '/Pages/Script/init.php';
+?>
+
+<nav 
+oncontextmenu="return false;" 
+class="
+sticky top-0 z-50 
+backdrop-blur-xl
+bg-white/70 dark:bg-gray-900/70
+border-b border-gray-200/50 dark:border-gray-800/50
+transition-all duration-300 ease-in-out
+">
+
+  <div class="max-w-6xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between transition-transform duration-300">
+
+    <!-- Logo -->
+    <a href="<?= $systemFolder; ?>/index.php" class="flex items-center gap-2 group" draggable="false">
+      <img 
+        id="navLogo"
+        src="<?= $logo; ?>"
+        draggable="false"
+        onerror="this.src='<?= $systemFolder; ?>/Assets/logo.png'"
+        class="system-logo h-9 w-9 rounded-full ring-2 ring-emerald-500/40 group-hover:scale-110 transition"
+      />
+      <span id="navSystemName" class="hidden lg:flex text-lg md:text-xl font-black transition-transform duration-300 tracking-tight text-emerald-600 dark:text-emerald-400">
+        <?php
+        echo htmlspecialchars($settings['system_name']);
+        ?>
+      </span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-6 font-semibold">
+      <a href="<?= $systemFolder ?>/index.php" class="nav-link nav-item" draggable="false">Home</a>
+      <a href="<?= $systemFolder ?>/Pages/admin/dashboard.php" class="nav-link nav-item" draggable="false">Dashboard</a>
+    </div>
+
+    <!-- Right Section -->
+    <div class="flex items-center gap-2 md:gap-3">
+      <?php if ($isAdminLoggedIn): ?>
+      <!-- New Order Button -->
+      <a href="<?= $systemFolder ?>/Pages/admin/order/new.php"
+        data-tippy-content="Create New Order"
+        class="flex items-center justify-center
+                px-4 py-2
+                rounded-full font-bold text-white
+                bg-gradient-to-r from-emerald-500 to-green-600
+                hover:scale-105 transition shadow" draggable="false">
+
+        <!-- Desktop -->
+        <span class="hidden md:inline"><i class="fa-solid fa-plus"></i> New Order</span>
+
+        <!-- Mobile -->
+        <span class="md:hidden text-lg font-black"><i class="fa-solid fa-plus"></i></span>
+
+      </a>
+      <?php endif; ?>
+      <!-- Theme -->
+      <div class="relative">
+        <button
+    id="themeToggleBtn"
+    data-tippy-content="<div class='text-center'><span class='font-semibold'>Toggle Theme</span><br><span class='text-xs lg:block hidden'>(Shift + D)</span></div>"
+          class="p-2 px-4 py-2 rounded-full border
+                 border-gray-200 dark:border-gray-700
+                 bg-white/70 dark:bg-gray-800/70
+                 hover:scale-105 transition">
+          <i id="themeDarkIcon" class="fa-solid fa-sun"></i>
+        </button>
+
+        <div id="themeDropdown"
+          class="hidden absolute right-0 mt-2 w-40 rounded-xl shadow-xl
+                 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 z-50">
+          <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800" onclick="setTheme('light')">☀️ Light</button>
+          <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800" onclick="setTheme('dark')">🌙 Dark</button>
+        </div>
+      </div>
+
+      <?php if ($isAdminLoggedIn): ?>
+
+      <!-- Admin -->
+      <div class="relative hidden md:block">
+        <button id="adminMenuButton"
+          class="px-4 py-2 rounded-full font-bold text-white
+                 bg-gradient-to-r from-emerald-500 to-emerald-600
+                 hover:scale-105 transition shadow">
+          <i class="fa-solid <?php echo $isSuperAdminLoggedIn
+              ? "fa-user-shield"
+              : "fa-user"; ?>"></i>
+          Admin
+        </button>
+
+        <div id="adminDropdown"
+          class="hidden absolute right-0 mt-2 w-44 rounded-xl shadow-xl
+                 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 z-50 transition-transform duration-300">
+          <a href="<?= $systemFolder ?>/Pages/admin/dashboard.php" draggable="false" oncontextmenu="return false;"
+             class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-tl-xl rounded-tr-xl transition-transform duration-300">
+            Dashboard
+          </a>
+          <a href="<?= $systemFolder ?>/Pages/admin/settings.php" draggable="false" oncontextmenu="return false;"
+             class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-transform duration-300">
+            Settings
+          </a>
+          <a href="<?= $systemFolder ?>/Pages/Script/logout.php" draggable="false" oncontextmenu="return false;"
+             class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-bl-xl rounded-br-xl transition-transform duration-300">
+            Logout
+          </a>
+        </div>
+      </div>
+
+      <?php else: ?>
+
+      <a href="<?= $systemFolder ?>/Pages/admin/login.php"
+         class="hidden md:inline-block px-4 py-2 rounded-full font-bold text-white
+                bg-gradient-to-r from-emerald-500 to-emerald-600 hover:scale-105 transition">
+        Sign In
+      </a>
+
+      <?php endif; ?>
+
+      <!-- Mobile Button -->
+      <button id="mobileMenuBtn"
+        class="md:hidden p-2 rounded-lg border border-gray-300 dark:border-gray-700">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden px-4 pb-4 space-y-3">
+
+    <a href="<?= $systemFolder ?>/index.php" class="block nav-link nav-item">Home</a>
+    <a href="<?= $systemFolder ?>/Pages/admin/dashboard.php" class="block nav-link nav-item">Dashboard</a>
+    <a href="<?= $systemFolder ?>/Pages/admin/settings.php" class="block nav-link nav-item">Settings</a>
+    <?php if ($isAdminLoggedIn): ?>
+      <a href="<?= $systemFolder ?>/Pages/Script/logout.php"
+         class="block text-red-500 font-bold">Logout</a>
+    <?php else: ?>
+      <a href="<?= $systemFolder ?>/Pages/admin/login.php"
+         class="block text-emerald-500 font-bold">Sign In</a>
+    <?php endif; ?>
+
+  </div>
+
+</nav>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("a").forEach(link => {
+        link.addEventListener("auxclick", (e) => {
+            if (e.button === 1) { // Middle mouse button
+                e.preventDefault();
+            }
+        });
+    });
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    document.querySelectorAll("img, a").forEach(el => {
+        el.setAttribute("draggable", "false");
+    });
+
+  // Mobile menu toggle
+  document.getElementById("mobileMenuBtn")?.addEventListener("click", () => {
+    document.getElementById("mobileMenu").classList.toggle("hidden");
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const currentPath = window.location.pathname;
+  const currentHash = window.location.hash;
+
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  navLinks.forEach(link => {
+    const linkURL = new URL(link.href);
+    const linkPath = linkURL.pathname;
+    const linkHash = linkURL.hash;
+
+    // Reset first
+    link.classList.remove(
+      "text-emerald-600",
+      "dark:text-emerald-400",
+      "font-bold",
+      "border-b-2",
+      "border-emerald-400",
+      "dark:border-emerald-600"
+    );
+    link.classList.add("text-gray-500", "dark:text-gray-400");
+
+    // If link has hash (#about)
+    if (linkHash) {
+      if (linkPath === currentPath && linkHash === currentHash) {
+        activateLink(link);
+      }
+    } else {
+      // Normal page link (Home, Dashboard)
+      if (
+        (linkPath === currentPath ||
+          (linkPath.endsWith("/index.php") &&
+          currentPath === linkPath.replace("/index.php", "/"))) &&
+        currentHash === ""
+      ) {
+        activateLink(link);
+      }
+    }
+  });
+
+  function activateLink(link) {
+    link.classList.remove("text-gray-500", "dark:text-gray-400");
+    link.classList.add(
+      "text-emerald-600",
+      "dark:text-emerald-400",
+      "font-bold",
+      "border-b-2",
+      "border-emerald-400",
+      "dark:border-emerald-600"
+    );
+  }
+});
+</script>
