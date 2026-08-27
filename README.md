@@ -1,371 +1,326 @@
-🍽️ Lalenz Order Management System
+# 🍽️ Lalenz Order Management System
 
-A modern and responsive restaurant order management system built to make managing orders, sales, and daily operations simple.
+> A modern restaurant order management system built to simplify order tracking, sales monitoring, and daily restaurant operations.
 
+<p align="center">
+  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white" alt="jQuery">
+  <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chart.js&logoColor=white" alt="Chart.js">
+</p>
 
+---
 
+## 📖 About
 
+**Lalenz Order Management System** is a web-based restaurant management application designed to make order tracking and daily operations easier.
 
+The system provides an administrative dashboard where restaurant staff can monitor sales, orders, pending transactions, completed orders, recent activity, and overall performance from a single interface.
 
-📌 About
+The project combines a responsive frontend with PHP backend functionality, dynamic data processing, authentication, database integration, and interactive analytics.
 
-Lalenz Order Management System is a restaurant-focused web application designed to provide administrators with a centralized dashboard for monitoring orders, sales, and daily restaurant activity.
+---
 
-The system combines a responsive user interface with dynamic dashboard data, interactive charts, authentication, database integration, and configurable system settings.
+## ✨ Features
 
-It was built as a practical project to explore full-stack web development and the integration of frontend interfaces with backend services and databases.
+### 📊 Dashboard
 
-✨ Features
-📊 Admin Dashboard
+- Today's sales
+- Orders today
+- Pending orders
+- Completed orders
+- Sales comparison with yesterday
+- Order comparison with yesterday
+- Recent orders
+- Dynamic currency formatting
 
-Get an overview of your restaurant's current activity at a glance.
+### 📦 Order Management
 
-💰 Today's sales
-🛒 Orders today
-⏳ Pending orders
-✅ Completed orders
-📈 Sales trends
-📊 Order statistics
-🕐 Timezone-aware data
-📦 Order Management
-
-Monitor recent orders directly from the dashboard.
-
-Customer information
-Order ID
-Number of items
-Order total
-Order status
-Order date and time
-Automatic status styling
-📈 Performance Analytics
+Recent orders provide important information at a glance:
 
-Interactive charts powered by Chart.js.
+- Customer name
+- Order ID
+- Number of items
+- Order total
+- Order status
+- Order date and time
 
-Available time ranges:
+### 📈 Performance Analytics
 
-Last 24 Hours
-Last 7 Days
-Last 15 Days
-Last 30 Days
-Last 60 Days
-Last 12 Months
+Interactive charts powered by **Chart.js**.
 
-The dashboard separates orders and sales into individual datasets, making it easier to understand restaurant performance over time.
+Supported ranges:
 
-🌙 Dark Mode
+- Last 24 Hours
+- Last 7 Days
+- Last 15 Days
+- Last 30 Days
+- Last 60 Days
+- Last 12 Months
 
-The interface supports both light and dark themes.
+The dashboard visualizes both **order volume** and **sales revenue**.
 
-The selected theme is stored in the browser using localStorage, allowing the user's preference to persist between visits.
+### 🌙 Dark Mode
 
-🔐 Authentication
+The application supports light and dark themes using Tailwind CSS.
 
-Administrative areas are protected using authentication mechanisms including:
+The selected theme is stored in `localStorage` so the user's preference persists between visits.
 
-JWT
-Admin authentication
-Protected dashboard access
-💱 Currency Support
+### 💱 Currency Support
 
-The system supports configurable currencies and dynamically displays the appropriate currency symbol throughout the dashboard.
+Sales values are dynamically formatted using the configured currency and currency symbol.
 
-🌎 Timezone Support
+### 🌎 Timezone Support
 
-Order dates and dashboard statistics are calculated using the configured system timezone.
+Dashboard statistics and order timestamps use the configured system timezone.
 
-This helps ensure that:
+This keeps daily statistics, yesterday comparisons, chart data, and order timestamps consistent.
 
-"Today" is calculated correctly
-Yesterday's data is accurate
-Charts use the correct dates
-Order timestamps are displayed according to the configured timezone
-🛠️ Tech Stack
-Frontend
-Technology	Usage
-JavaScript	Application logic
-jQuery	AJAX and DOM manipulation
-Tailwind CSS	UI styling
-Bootstrap	Additional UI development
-Chart.js	Data visualization
-Font Awesome	Icons
-Toastr.js	Notifications
-Backend
-Technology	Usage
-PHP	Server-side application
-Node.js	JavaScript runtime / tooling
-Express.js	REST API development
-REST APIs	Data communication
-JWT	Authentication
-Database
-Database	Usage
-MongoDB	NoSQL data storage
-SQLite	Lightweight relational storage
-🖥️ Dashboard
-
-The main dashboard provides a quick snapshot of restaurant operations.
-
-┌─────────────────────────────────────────────────────────────┐
-│                       OVERVIEW                              │
-│           Real-time overview of today's operations          │
-├────────────────┬────────────────┬────────────────┬─────────┤
-│  TODAY SALES   │ ORDERS TODAY   │    PENDING     │COMPLETED│
-│                │                │                │         │
-│   ₱12,450.00   │      42        │       8        │   34    │
-├────────────────┴────────────────┴────────────────┴─────────┤
-│                                                             │
-│                 PERFORMANCE OVERVIEW                        │
-│                                                             │
-│       ╱╲       Sales                                       │
-│      ╱  ╲   ╱╲                                             │
-│  ╱╲ ╱    ╲_╱  ╲                                            │
-│ ╱  ╲             ╲                                        │
-│                                                             │
-├─────────────────────────────────────────────────────────────┤
-│                     RECENT ORDERS                           │
-│                                                             │
-│  Customer       Order #       Total          Status        │
-│  ───────────────────────────────────────────────────────── │
-│  Customer 1      #1024        ₱850.00        Completed     │
-│  Customer 2      #1023        ₱420.00        Preparing     │
-│  Customer 3      #1022        ₱650.00        Pending       │
-└─────────────────────────────────────────────────────────────┘
-
-📈 Analytics
-
-The dashboard dynamically processes order information and generates performance statistics.
-
-24-Hour View
-
-Orders are grouped by hour.
-
-Daily Views
-
-The following ranges group orders by day:
-
-7 Days
-15 Days
-30 Days
-60 Days
-
-Yearly View
-
-The 12-month view groups orders by month.
-
-Jan → Feb → Mar → Apr → May → Jun
- ↓      ↓      ↓      ↓      ↓      ↓
-Sales  Sales  Sales  Sales  Sales  Sales
-
-📋 Order Statuses
-
-The system supports multiple order statuses:
-
-Status	Description
-🟠 Pending	Order is waiting to be processed
-🟡 Preparing	Order is currently being prepared
-🟢 Ready	Order is ready
-🔵 Out For Delivery	Order is being delivered
-🟣 Scheduled	Order is scheduled
-🟢 Completed	Order has been completed
-🔴 Cancelled	Order has been cancelled
-📁 Project Structure
-LALENZ_ORDER_SYSTEM/
-│
-├── Pages/
-│   │
-│   ├── admin/
-│   │   ├── login.php
-│   │   └── dashboard.php
-│   │
-│   ├── Partials/
-│   │   ├── navbar.html
-│   │   └── footer.php
-│   │
-│   └── Script/
-│       ├── init.php
-│       ├── get_orders.php
-│       │
-│       └── Dashboard/
-│           └── navbar.js
-│
-├── assets/
-│   ├── images/
-│   └── ...
-│
-├── index.php
-│
-└── README.md
-
-🔄 How It Works
-                  ┌─────────────────┐
-                  │     CUSTOMER    │
-                  └────────┬────────┘
-                           │
-                           ▼
-                  ┌─────────────────┐
-                  │      ORDER      │
-                  │     SYSTEM      │
-                  └────────┬────────┘
-                           │
-                           ▼
-                  ┌─────────────────┐
-                  │     DATABASE    │
-                  │ MongoDB / SQLite│
-                  └────────┬────────┘
-                           │
-                           ▼
-                  ┌─────────────────┐
-                  │   REST / PHP    │
-                  │      API       │
-                  └────────┬────────┘
-                           │
-                           ▼
-                  ┌─────────────────┐
-                  │ ADMIN DASHBOARD │
-                  └─────────────────┘
-
-🎨 UI
-
-The dashboard was designed with a focus on a clean and modern interface.
-
-UI Features
-Responsive layout
-Mobile-friendly design
-Dark mode
-Smooth transitions
-Interactive cards
-Status badges
-Hover animations
-Responsive charts
-Toast notifications
-Dynamic content loading
-🔒 Security
-
-The project includes several security-related components:
-
-JWT authentication
-Protected admin pages
-Server-side authentication checks
-HTML output escaping
-Database-backed authentication
-Configurable system settings
-
-For production deployment, additional security measures should be considered, such as:
-
-HTTPS
-Secure cookie configuration
-CSRF protection
-Rate limiting
-Environment variables for secrets
-Strong password hashing
-API request validation
-Input sanitization
-🚀 Getting Started
-Requirements
-
-Before running the project, make sure you have:
-
-PHP
-MySQL/MongoDB/SQLite depending on configuration
-Apache, Nginx, XAMPP, Laragon, or PHP's built-in server
-Node.js if using the Node/Express components
-Installation
-1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/lalenz-order-system.git
-
-2. Enter the project
-cd lalenz-order-system
-
-3. Configure the application
-
-Update your configuration files with your:
-
-Database
-System Name
-Currency
-Timezone
-Authentication Secrets
-
-4. Start the application
-
-Using PHP's built-in server:
-
-php -S localhost:8000
-
-
-Then open:
-
-http://localhost:8000
-
-📸 Screenshots
-
-Add your actual screenshots here.
-
-Dashboard — Light Mode
-
-Dashboard — Dark Mode
-
-Login
-
-🧠 What I Learned
-
-This project gave me hands-on experience with:
-
-Building a real-world dashboard
-JavaScript DOM manipulation
-jQuery AJAX requests
-REST API integration
-PHP backend development
-JWT authentication
-Database integration
-MongoDB
-SQLite
-Chart.js
-Tailwind CSS
-Responsive web design
-Dark mode implementation
-Date and timezone handling
-Dynamic data processing
-UI/UX design
-🔮 Future Improvements
-
-Some features I'd like to add or improve:
-
- Real-time order notifications
- Customer management
- Product/menu management
- Inventory tracking
- Advanced sales reports
- Export reports to PDF/Excel
- More detailed analytics
- Role-based admin permissions
- Automated backups
- PWA/mobile support
- Improved API architecture
-👨‍💻 Developer
-
-Built with ☕, JavaScript, PHP, and probably too much debugging.
-
-I'm a 22-year-old developer currently exploring full-stack development and building projects to improve my skills.
-
-Technologies I'm familiar with
-JavaScript
-PHP
-Node.js
-Express.js
-REST APIs
-JWT
-MongoDB
-SQLite
-Tailwind CSS
-Bootstrap
-jQuery
-
-
-I'm still learning, experimenting, breaking things, fixing them, and trying to make each project better than the last one. 🚀
-
-⭐ Support
-
-If you find this project interesting, consider giving it a ⭐ on GitHub.
-
-<p align="center"> Made with ❤️ and a lot of debugging </p>
+### 🔐 Authentication
+
+Administrative functionality supports authentication and protected dashboard access.
+
+JWT can be used for authentication and API authorization.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+- jQuery
+- Tailwind CSS
+- Bootstrap
+- Chart.js
+- Font Awesome
+- Toastr.js
+
+### Backend
+
+- PHP
+- Node.js
+- Express.js
+- REST APIs
+- JWT
+
+### Database
+
+- MongoDB
+- SQLite
+
+---
+
+## 🖥️ Dashboard
+
+The dashboard focuses on presenting the most important restaurant information immediately after login.
+
+### Key Metrics
+
+| Metric | Description |
+| --- | --- |
+| 💰 Today's Sales | Total non-cancelled sales for today |
+| 🛒 Orders Today | Number of valid orders today |
+| ⏳ Pending | Orders currently waiting to be processed |
+| ✅ Completed | Completed orders today |
+
+### Performance Overview
+
+The dashboard includes a dual-axis chart displaying:
+
+- **Orders** — number of orders over time
+- **Sales** — total sales over time
+
+---
+
+## 📋 Order Statuses
+
+The system supports multiple order states:
+
+- 🟠 **Pending**
+- 🟡 **Preparing**
+- 🟢 **Ready**
+- 🔵 **Out For Delivery**
+- 🟣 **Scheduled**
+- 🟢 **Completed**
+- 🔴 **Cancelled**
+
+Cancelled orders are excluded from sales calculations.
+
+---
+
+## 📁 Project Structure
+
+    LALENZ_ORDER_SYSTEM/
+    │
+    ├── Pages/
+    │   ├── admin/
+    │   │   ├── login.php
+    │   │   └── dashboard.php
+    │   │
+    │   ├── Partials/
+    │   │   ├── navbar.html
+    │   │   └── footer.php
+    │   │
+    │   └── Script/
+    │       ├── init.php
+    │       ├── get_orders.php
+    │       └── Dashboard/
+    │           └── navbar.js
+    │
+    ├── assets/
+    │   └── ...
+    │
+    ├── index.php
+    └── README.md
+
+---
+
+## 🎨 UI & UX
+
+The interface was designed around a clean and modern dashboard experience.
+
+### Highlights
+
+- Responsive design
+- Mobile-friendly layout
+- Light and dark themes
+- Smooth transitions
+- Rounded dashboard cards
+- Color-coded order statuses
+- Interactive analytics
+- Toast notifications
+- Dynamic content loading
+- Responsive navigation
+
+---
+
+## 📸 Screenshots
+
+Add your screenshots inside a `screenshots` directory.
+
+### Dashboard
+
+![Lalenz Dashboard](screenshots/dashboard.png)
+
+### Dark Mode
+
+![Lalenz Dashboard Dark Mode](screenshots/dashboard-dark.png)
+
+### Login
+
+![Lalenz Login](screenshots/login.png)
+
+---
+
+## 🔄 Application Flow
+
+    Admin
+      │
+      ▼
+    Login
+      │
+      ▼
+    Authentication
+      │
+      ▼
+    Dashboard
+      │
+      ├── Sales
+      ├── Orders
+      ├── Pending
+      ├── Completed
+      └── Analytics
+              │
+              ▼
+          Order Data
+              │
+              ▼
+           Database
+
+---
+
+## 🧠 What I Learned
+
+Building Lalenz gave me practical experience with multiple technologies working together in a real application.
+
+I worked with:
+
+- PHP backend development
+- JavaScript
+- jQuery AJAX
+- REST APIs
+- JWT authentication
+- Node.js
+- Express.js
+- MongoDB
+- SQLite
+- Tailwind CSS
+- Bootstrap
+- Chart.js
+- Responsive UI development
+- Dark mode
+- Date and timezone handling
+- Dynamic data processing
+- Dashboard architecture
+
+More importantly, this project helped me understand how different technologies can work together to build a complete, database-driven application.
+
+---
+
+## 🚀 Roadmap
+
+- [ ] Real-time order notifications
+- [ ] Customer management
+- [ ] Menu management
+- [ ] Inventory management
+- [ ] Advanced sales reports
+- [ ] PDF / Excel exports
+- [ ] Role-based access control
+- [ ] Automated backups
+- [ ] Advanced analytics
+- [ ] Mobile / PWA support
+- [ ] Improved REST API architecture
+
+---
+
+## 👨‍💻 About Me
+
+I'm a **22-year-old developer** interested in web development, backend systems, REST APIs, databases, and building practical applications.
+
+I'm still learning and experimenting with different technologies, using real projects like Lalenz to improve my development skills.
+
+### Technologies I've Worked With
+
+**Languages & Runtime**
+
+`JavaScript` `PHP` `Node.js`
+
+**Backend**
+
+`Express.js` `REST APIs` `JWT`
+
+**Frontend**
+
+`Tailwind CSS` `Bootstrap` `jQuery`
+
+**Database**
+
+`MongoDB` `SQLite`
+
+---
+
+## 📌 Project Status
+
+**Active Development**
+
+Lalenz is an ongoing project. New features, improvements, and optimizations will continue to be added as the project evolves.
+
+---
+
+<p align="center">
+  Built with ❤️ and a lot of debugging.
+</p>
