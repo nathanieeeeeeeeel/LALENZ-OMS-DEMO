@@ -212,7 +212,9 @@ Add your screenshots inside a `screenshots` directory.
 
 ### Login
 
-![Lalenz Login](screenshots/login.png)
+![Lalenz Login](Pages/Assets/Images/Login_page1.png)
+![Lalenz Login](Pages/Assets/Images/Login_page2.png)
+![Lalenz Login](Pages/Assets/Images/Login_page3.png)
 
 ---
 
